@@ -99,6 +99,7 @@ export default class home extends Component {
         }
       ]
     };
+    this.renderItem = this.renderItem.bind(this);
   }
   componentDidMount() {
     this._startTimer();
@@ -109,7 +110,7 @@ export default class home extends Component {
   renderItem({ item, index }) {
     return (
       <TouchableHighlight
-        onPress={() => {}}>
+        onPress={() => this.props.navigation.navigate('Details')}>
         <View style={styles.row}>
           <Image source={{ uri: item.url }} style={styles.productImage}></Image>
           <View style={styles.productText}>

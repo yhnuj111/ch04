@@ -10,12 +10,9 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  View
-} from 'react-native';
 
-import Home from './home';
-import Detail from './detail';
+import HomeScreen from './home';
+import DetailScreen from './detail';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +21,8 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="首页" component={Home}/>
-          <Stack.Screen name="详情" component={Detail}/>
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: '首页' }} />
+          <Stack.Screen name="Details" component={DetailScreen} options={{ title: '详情' }} />
         </Stack.Navigator>
       </NavigationContainer>
     );
