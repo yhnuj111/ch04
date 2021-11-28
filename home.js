@@ -24,11 +24,17 @@ import {
   Image,
   RefreshControl,
 } from 'react-native';
-import { useNavigationContainerRef } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import More from './more';
+
 const circleSize = 8;
 const circleMargin = 5;
+const Tab = createBottomTabNavigator();
 
-export default class home extends Component {
+class home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -110,7 +116,14 @@ export default class home extends Component {
   renderItem({ item, index }) {
     return (
       <TouchableHighlight
-        onPress={() => this.props.navigation.navigate('Details')}>
+        onPress={() => {
+          const navigation = this.props.navigation;
+          if (navigation) {
+            navigation.navigate('Details', {
+              productTitle: item.title
+            });
+          }
+        }}>
         <View style={styles.row}>
           <Image source={{ uri: item.url }} style={styles.productImage}></Image>
           <View style={styles.productText}>
@@ -232,7 +245,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchBar: {
-    marginTop: 0,
+    marginTop: Platform.OS === 'ios' ? 35 : 0,
     height: 40,
     flexDirection: 'row',
   },
@@ -307,3 +320,34 @@ const styles = StyleSheet.create({
     marginHorizontal: circleMargin
   }
 });
+
+
+export default class root extends Component {
+  render() {
+    return (
+      <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused
+              ? 'home'
+              : 'home';
+          } else if (route.name === 'More') {
+            iconName = focused ? 'home' : 'home';
+          }
+          return <Icon name='ios-person' size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}
+      >
+        <Tab.Screen name="Home" component={home} options={{
+          title: '首页', headerShown: false
+        }}></Tab.Screen>
+        <Tab.Screen name="More" component={More} options={{ title: 'More', tabBarBadge: 3 }}></Tab.Screen>
+      </Tab.Navigator>
+    );
+  }
+}

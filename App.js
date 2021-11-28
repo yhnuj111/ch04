@@ -20,9 +20,9 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} options={{ title: '首页' }} />
-          <Stack.Screen name="Details" component={DetailScreen} options={{ title: '详情' }} />
+        <Stack.Navigator initialRouteName="Root">
+          <Stack.Screen name="Root" component={HomeScreen} options={{ title: '首页', headerShown: false }} />
+          <Stack.Screen name="Details" component={DetailScreen} options={{ title: '详情', headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     );
