@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    ActivityIndicator
 } from 'react-native';
 
 export default class detail extends Component {
@@ -12,9 +13,7 @@ export default class detail extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>
-                    更多页面
-                </Text>
+               <ActivityIndicator color="purple" size="large"/>
             </View>
         );
     }
