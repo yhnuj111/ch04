@@ -27,6 +27,8 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Swiper from 'react-native-swiper';
+import { Container, Heading, Center, NativeBaseProvider, Box, InputGroup, Icon, Input, Stack } from 'native-base';
 
 import More from './more';
 
@@ -41,13 +43,16 @@ class home extends Component {
       currentPage: 0,
       advertisements: [
         {
-          url: 'https://img13.360buyimg.com/cms/jfs/t4090/228/1399180862/217278/206073fe/5874e621Nc675c6d0.jpg'
+          url: 'https://static.porn-images-xxx.com/upload/20160609/23/22574/9.jpg'
         },
         {
           url: 'https://static.porn-images-xxx.com/upload/20160612/29/29284/7.jpg'
         },
         {
           url: 'https://static.porn-images-xxx.com/upload/20160609/23/22573/20.jpg'
+        },
+        {
+          url: 'https://static.porn-images-xxx.com/upload/20160609/23/22574/10.jpg'
         }
       ],
       searchText: '',
@@ -108,7 +113,7 @@ class home extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
   componentDidMount() {
-    this._startTimer();
+    // this._startTimer();
   }
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -181,61 +186,75 @@ class home extends Component {
     const indicatorWidth = circleSize * advertisementCount + circleMargin * advertisementCount * 2;
     const left = (Dimensions.get('window').width - indicatorWidth) / 2;
     return (
-      <View style={styles.container}>
-        <StatusBar
-          backgroundColor={'blue'}
-          barStyle={'default'}
-          networkActivityIndicatorVisible={true}
-        />
-        <View style={styles.searchBar}>
-          <TextInput style={styles.input} placeholder="搜索商品"
-            onChangeText={(text) => {
-              this.setState({ searchText: text });
-              console.log(this.state.searchText);
-            }}
-          />
-          <Button
-            style={styles.button}
-            title="搜索"
-            onPress={() => {
-              // Alert.alert('你单击了搜索按钮' + this.state.searchText, null, null);
-              this.props.navigation.navigate('Detail');
-            }}
-          />
-        </View>
-        <View style={styles.advertisement}>
-          <ScrollView
-            ref={res => {
-              this.scrollView = res;
-            }}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled={true}>
-            {this.state.advertisements.map((ad, idx) => {
-              return (
-                <TouchableHighlight
-                  key={idx}
-                  onPress={() => Alert.alert('你单击了轮播图', null, null)}>
-                  <Image style={styles.advertisementContent} source={{ uri: ad.url }}></Image>
-                </TouchableHighlight>
-              );
-            })}
-          </ScrollView>
-          <View style={[styles.indicator, { left: left }]}>
-            {this.state.advertisements.map((ad, idx) => {
-              return (
-                <View key={idx} style={(idx === this.state.currentPage) ? styles.circleSelected : styles.circle}></View>
-              );
-            })}
-          </View>
-        </View>
-        <View style={styles.products}>
-          <FlatList data={this.state.listData} renderItem={this.renderItem}
-            ItemSeparatorComponent={this._renderSeperator}
-            refreshControl={this._renderRefreshControl()}
-          />
-        </View>
-      </View>
+      <NativeBaseProvider>
+        <Center flex={1}>
+          <Container maxWidth="100%">
+            <View style={styles.searchBar}>
+              <Stack direction="row">
+                <Input
+                  w={{
+                    base: "83%",
+                    md: "25%",
+                  }}
+                  ml="2"
+                  placeholder="搜索商品"
+                  bg="gray.100"
+                  borderRadius="15"
+                  onChangeText={(text) => {
+                    this.setState({ searchText: text });
+                    console.log(`搜索的文字${this.state.searchText}`);
+                  }}
+                  _hover={{ bg: 'gray.200', borderWidth: 0 }}
+                  placeholderTextColor="gray.500"
+                  InputLeftElement={
+                    <Icon
+                      as={<Feather name="search" />}
+                      size={5}
+                      ml="2"
+                      color="muted.400"
+                    />
+                  }
+                />
+                <Button
+                  style={styles.button}
+                  title="搜索"
+                  onPress={() => {
+                    // Alert.alert('你单击了搜索按钮' + this.state.searchText, null, null);
+                    console.log(this.props.navigation)
+                    const navigation = this.props.navigation;
+                    if (navigation) {
+                      navigation.navigate('Details');
+                    }
+                  }}
+                />
+              </Stack>
+
+            </View>
+
+            <View style={styles.advertisement}>
+              <Swiper
+                height={190}
+                autoplay={true}
+              >
+                {this.state.advertisements.map((ad, idx) => {
+                  return (
+                    <TouchableHighlight key={idx} onPress={() => Alert.alert('你单击了轮播图', null, null)}>
+                      <Image style={styles.advertisementContent} source={{ uri: ad.url }}></Image>
+                    </TouchableHighlight>
+                  );
+                })}
+              </Swiper>
+
+            </View>
+            <View style={styles.products}>
+              <FlatList data={this.state.listData} renderItem={this.renderItem}
+                ItemSeparatorComponent={this._renderSeperator}
+                refreshControl={this._renderRefreshControl()}
+              />
+            </View>
+          </Container>
+        </Center>
+      </NativeBaseProvider>
     );
   }
 }
@@ -250,7 +269,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   advertisement: {
-    height: 180,
+    height: 350,
   },
   products: {
     flex: 1,
@@ -298,7 +317,7 @@ const styles = StyleSheet.create({
   },
   advertisementContent: {
     width: Dimensions.get('window').width,
-    height: 180,
+    height: 350,
   },
   indicator: {
     position: 'absolute',
